@@ -76,12 +76,49 @@ class App:
         try:
             base_url = "https://data.alpaca.markets"
             response = requests.get(base_url + self.endpoint_ticker, headers=self.headers, params=self.params_ticker)
+                 # Create a new window
+            new_window = tk.Toplevel(self.root)
+            new_window.title("Ticker Data")
+
+
+    
+        # Create a scrollbar
+            scrollbar = tk.Scrollbar(new_window)
+            scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+            
+
+           # Create a Text widget and add some test text
+            button = tk.Button(new_window, text="Export Data")
+            button.pack()
+            text = tk.Text(new_window)
+            text.insert(tk.END, "Test text\n")
+            
             data = response.json()
+
+        # Display the data in the new window
+            for ticker, trade_data in data['trades'].items():
+                price = trade_data['p']
+                #label = tk.Label(new_window, text=f"Ticker: {ticker}, Price: {price}")
+                #label.pack()
+                text.insert(tk.END, f"Ticker: {ticker}, Price: {price}\n")
+               
+            
             for ticker, trade_data in data['trades'].items():
                 price = trade_data['p']
                 print(f"Ticker: {ticker}, Price: {price}")
+
+
+            text.config(state=tk.DISABLED)
+            text.pack()
+
+            #
+            #
+            #scrollbar.config(command=text.yview)
+
         except Exception as e:
             logging.error("Error in get_auctions_data: %s", e)
+
 
 
 try:
